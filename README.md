@@ -4,12 +4,21 @@ This is a simple static website for Boundless Endeavors LLC.
 
 ## Files
 
-- `index.html` - the full website.
+- `public/index.html` - the full website.
+- `wrangler.jsonc` - Cloudflare Workers Static Assets configuration.
 
-## DNS and Cloudflare Pages
+## DNS and Hosting Options
 
-Yes, you can keep DNS at Hover so your email records stay there. Point only the
-website-related DNS records to Cloudflare Pages.
+Yes, you can keep DNS at Hover so your email records stay there. The cleanest
+way to do that is still Cloudflare Pages with a `www` subdomain CNAME.
+
+Cloudflare Workers Static Assets is also configured for this repo, but Workers
+custom domains require the domain to be an active Cloudflare zone. That means
+you would need to move authoritative DNS from Hover to Cloudflare if you want
+`www.yourdomain.com` to point directly at a Worker without exposing the
+`*.workers.dev` URL.
+
+## Cloudflare Pages With Hover DNS
 
 The simplest setup is to publish the site at `www.yourdomain.com`. In
 Cloudflare Pages, add `www.yourdomain.com` as a custom domain first. Cloudflare
@@ -25,6 +34,27 @@ Value: your-project.pages.dev
 ```
 
 Keep Hover's existing MX/TXT records for email unchanged.
+
+## Cloudflare Workers Static Assets
+
+This repo can also deploy as a Worker using Workers Static Assets:
+
+```text
+npm install
+npm run deploy
+```
+
+The static website lives in `public/index.html`, and `wrangler.jsonc` points
+Workers at that directory.
+
+If you deploy only to the default Workers URL, it will look like this:
+
+```text
+https://boundless-endeavors.<your-workers-subdomain>.workers.dev
+```
+
+That URL may include a personal or account-specific Workers subdomain. A custom
+domain hides it, but Workers custom domains require Cloudflare DNS for the zone.
 
 ## Root Domain
 
